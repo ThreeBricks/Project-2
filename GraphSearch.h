@@ -1,13 +1,14 @@
 #include <stack>
 #include <queue>
-bool DFSRecHelper(const Node& currNode, const Node& dest, unordered_set<Node,NodeHash,NodeHashEqual>& visited, vector<Node>& pushVec){
+
+bool DFSRecHelper(const Node* currNode, const Node* dest, std::unordered_set<const Node*,NodeHash,NodeHashEqual>& visited, std::vector<Node>& pushVec){
+    pushVec.push_back(*currNode);
     visited.insert(currNode);
-    pushVec.push_back(currNode);
     if(currNode==dest){
         return true;
     }
     else{
-        for(auto node: currNode.getNeighbors()){
+        for(auto node: currNode->getNeighbors()){
             if(visited.find(node)==visited.end()){
                 DFSRecHelper(node,dest,visited,pushVec);
             }
@@ -16,37 +17,36 @@ bool DFSRecHelper(const Node& currNode, const Node& dest, unordered_set<Node,Nod
     return false;
 }
 
-vector<Node> DFSRec(const Node& start, const Node& dest){
-    vector<Node> pushVec;
-    vector<Node> startNeighbors=start.getNeighbors();
-    unordered_set<Node,NodeHash,NodeHashEqual> visited={};
-    pushVec.push_back(start);
-    for(vector<Node>::iterator it=startNeighbors.begin();it!=startNeighbors.end();it++){
+std::vector<Node> DFSRec(const Node* start, const Node* dest){
+    std::vector<Node> pushVec;
+    std::vector<const Node*> startNeighbors=start->getNeighbors();
+    std::unordered_set<const Node*,NodeHash,NodeHashEqual> visited={};
+    pushVec.push_back(*start);
+    visited.insert(start);
+    for(std::vector<const Node*>::iterator it=startNeighbors.begin();it!=startNeighbors.end();it++){
         if(visited.find(*it)==visited.end()){
             if(DFSRecHelper(*it,dest,visited,pushVec)){
                 return pushVec;
+                }
             }
         }
-    }
     if(visited.find(dest)==visited.end()){
         return {};
     }
-
     return pushVec;
 }
 
-
-vector<Node> DFSIter(const Node& start, const Node& dest) {
-    stack<Node> s;
-    vector<Node> nodeVec;
-    unordered_set<Node,NodeHash,NodeHashEqual> visited={};
-    Node curr=start;
+std::vector<Node> DFSIter(const Node* start, const Node* dest) {
+    std::stack<Node> s;
+    std::vector<Node> nodeVec;
+    std::unordered_set<const Node*,NodeHash,NodeHashEqual> visited={};
+    const Node* curr=start;
     if(curr==dest){
-        nodeVec.push_back(curr);
+        nodeVec.push_back(*curr);
         return nodeVec;
     }
     else{
-        s.push(curr);
+        s.push(*curr);
         visited.insert(curr);
         while(!s.empty()){
             Node curr=s.top();
@@ -60,7 +60,7 @@ vector<Node> DFSIter(const Node& start, const Node& dest) {
                 for(auto nodeNeighbor:curr.getNeighbors()){
                     if(visited.find(nodeNeighbor)==visited.end()){
                         visited.insert(nodeNeighbor);
-                        s.push(nodeNeighbor);
+                        s.push(*nodeNeighbor);
                     }
                 }
             }
@@ -71,11 +71,12 @@ vector<Node> DFSIter(const Node& start, const Node& dest) {
     }
     return nodeVec;
 }
-void BFTRecHelper(const Node& node,vector<Node>& pushVec,unordered_set<Node,NodeHash,NodeHashEqual>& visited){
+
+void BFTRecHelper(const Node* node,std::vector<Node>& pushVec,std::unordered_set<const Node*,NodeHash,NodeHashEqual>& visited){
     if(visited.find(node)==visited.end()){
         visited.insert(node);
-        pushVec.push_back(node);
-        for(auto neighNode:node.getNeighbors()){
+        pushVec.push_back(*node);
+        for(auto neighNode:node->getNeighbors()){
             BFTRecHelper(neighNode,pushVec,visited);
         }
 
@@ -84,25 +85,23 @@ void BFTRecHelper(const Node& node,vector<Node>& pushVec,unordered_set<Node,Node
 
 }
 
-vector<Node> BFTRec(const Graph& g){
-    vector<Node> nodeVec;
-    unordered_set<Node,NodeHash,NodeHashEqual> visited={};
+std::vector<Node> BFTRec(const Graph& g){
+    std::vector<Node> nodeVec;
+    std::unordered_set<const Node*,NodeHash,NodeHashEqual> visited={};
     for(auto curr:g.getAdjList()){
-        BFTRecHelper(curr.first,nodeVec,visited);
+        BFTRecHelper(curr,nodeVec,visited);
     }
     return nodeVec;
 }
 
-
-
-vector<Node> BFTIter(const Graph&g){
-    queue<Node> q;
-    vector<Node> nodeVec;
-    unordered_set<Node,NodeHash,NodeHashEqual> visited={};
+std::vector<Node> BFTIter(const Graph&g){
+    std::queue<Node> q;
+    std::vector<Node> nodeVec;
+    std::unordered_set<const Node*,NodeHash,NodeHashEqual> visited={};
     for(auto curr:g.getAdjList()){
-        if(visited.find(curr.first)==visited.end()){
-        q.push(curr.first);
-        visited.insert(curr.first);
+        if(visited.find(curr)==visited.end()){
+        q.push(*curr);
+        visited.insert(curr);
         while(!q.empty()){
             Node curr=q.front();
             q.pop();
@@ -110,7 +109,7 @@ vector<Node> BFTIter(const Graph&g){
             for(auto nodeNeighbor:curr.getNeighbors()){
                 if(visited.find(nodeNeighbor)==visited.end()){
                     visited.insert(nodeNeighbor);
-                        q.push(nodeNeighbor);
+                        q.push(*nodeNeighbor);
                     }
                 }
             }
@@ -118,19 +117,5 @@ vector<Node> BFTIter(const Graph&g){
     }
     return nodeVec;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
