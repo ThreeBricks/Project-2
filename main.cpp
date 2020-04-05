@@ -32,10 +32,20 @@ UndirectedGraph createLinkedList(int n){
     }
     return ud;
 }
+vector<Node> BFTRecLinkedList(){
+    return BFTRec(createLinkedList(10000));
+}
+vector<Node> BFTIterLinkedList(){
+    return BFTIter(createLinkedList(10000));
+}
 
 int main(){
-    UndirectedGraph d=createRandomUnweightedGraphIter(10000);
-    for(auto node:BFTIter(d)){
+    vector<Node> recVec=BFTRecLinkedList();
+    vector<Node> iterVec=BFTIterLinkedList();
+    for(auto node:recVec){
+        cout<<node.getVal()<<" ";
+    }
+        for(auto node:iterVec){
         cout<<node.getVal()<<" ";
     }
 
