@@ -1,15 +1,15 @@
 #include <math.h>
 bool isValid(const GridNode* first, const GridNode* second){
-    if(first==NULL || second==NULL){
+    if(first == NULL || second == NULL){
         return false;
     }
-    else if(second->getY()==first->getY()+1 || second->getY()==first->getY()-1){
-        if(second->getX()==first->getX()){
+    else if(second->getY() == first->getY()+1 || second->getY() == first->getY()-1){
+        if(second->getX() == first->getX()){
             return true;
         }
     }
-    else if(second->getX()==first->getX()+1 || second->getX()==first->getX()-1){
-        if(second->getY()==first->getY()){
+    else if(second->getX() == first->getX()+1 || second->getX() == first->getX()-1){
+        if(second->getY() == first->getY()){
             return true;
         }
     }
@@ -21,8 +21,8 @@ class GridGraph{
 private:
     std::vector<GridNode*> adjList;
 public:
-    void addNode(const int xVal, const int yVal,const std::string& nodeStr){
-        GridNode* newNode=new GridNode(xVal,yVal,nodeStr);
+    void addGridNode(const int xVal, const int yVal,const std::string& nodeStr){
+        GridNode* newNode = new GridNode(xVal,yVal,nodeStr);
         adjList.push_back(newNode);
         return;
     }
@@ -33,7 +33,7 @@ public:
         }
         return;
     }
-    void removeDirectedEdge(const Node*first, const Node* second){
+    void removeUnDirectedEdge(const GridNode*first, const GridNode* second){
         first->removeNeighbor(second);
         second->removeNeighbor(first);
         return;
@@ -47,7 +47,7 @@ public:
     }
     GridNode* getNode(const int x, const int y){
         for(auto node:adjList){
-            if(node->getX()==x && node->getY()==y){
+            if(node->getX() == x && node->getY() == y){
                 return node;
             }
         }
@@ -66,17 +66,20 @@ public:
             if(counter%skip==0){
                 std::cout<<std::endl;
             }
-
         }
+        return;
     }
-    void displayEdges(){
-        for(auto node: adjList){
-            for(auto neighNode: node->getNeighbors()){
-                std::cout<<node->getVal()<<" "<<neighNode->getVal()<<" ";
-            }
-            std::cout<<std::endl;
-        }
-    }
-
 
 };
+std::ostream& operator <<(std::ostream& os, const GridGraph& gg){
+    for(auto node: gg.getAdjList()){
+        os<<node->getVal()<<": ";
+        for(auto neighNode: node->getNeighbors()){
+            os<<neighNode->getVal()<<" ";
+        }
+        os<<std::endl;
+    }
+}
+
+
+

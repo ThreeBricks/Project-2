@@ -1,4 +1,13 @@
-
+#include <iostream>
+#include <algorithm>
+#include <unordered_set>
+#include <unordered_map>
+#include <vector>
+#include <random>
+#include <stack>
+#include <queue>
+#include <time.h>
+#include <utility>
 class GridNode{
 private:
     int x;
@@ -8,16 +17,16 @@ private:
     mutable std::unordered_set<const GridNode*> neighbors;
 public:
     GridNode(){
-        x=-1;
-        y=-1;
-        val=-1;
-        visited=false;
+        x = -1;
+        y = -1;
+        val = -1;
+        visited = false;
     }
     GridNode(int xval,int yval, std::string nStr){
-        x=xval;
-        y=yval;
-        val=nStr;
-        visited=false;
+        x = xval;
+        y = yval;
+        val = nStr;
+        visited = false;
         neighbors.reserve(4);
     }
     std::string getVal()const{
@@ -34,9 +43,14 @@ public:
     }
     void addNeighbor(const GridNode* node)const{
         neighbors.insert(node);
+        return;
+    }
+    void removeNeighbor(const GridNode* node) const{
+        neighbors.erase(node);
+        return;
     }
     void visit()const{
-        visited=true;
+        visited = true;
         return;
     }
     bool isVisited()const{
@@ -44,7 +58,7 @@ public:
     }
 
     bool operator==(const GridNode node)const{
-        if(x==node.getX()&&y==node.getY()){
+        if(x == node.getX() && y == node.getY()){
             return true;
         }
         return false;
@@ -57,11 +71,11 @@ public:
 struct GridNodeHash{
     public:
         size_t operator() (const GridNode& n) const{
-            std::string str=n.getVal();
+            std::string str = n.getVal();
             return std::hash<std::string>()(str);
         }
         size_t operator() (const GridNode* n) const{
-            std::string str=n->getVal();
+            std::string str = n->getVal();
             return std::hash<std::string>()(str);
         }
 };

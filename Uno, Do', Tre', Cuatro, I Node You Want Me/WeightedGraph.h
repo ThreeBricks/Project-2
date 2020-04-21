@@ -1,31 +1,14 @@
-bool checkAcyclic(const Node* first, const Node* second){
-    std::queue<const Node*> holdQ;
-    holdQ.push(second);
-    while(!holdQ.empty()){
-        for(auto node: holdQ.front()->getNeighbors()){
-            if(node->getVal()==first->getVal()){
-                return false;
-            }
-            holdQ.push(node);
-        }
-        holdQ.pop();
-    }
- return true;
-}
-
-class DirectedGraph: public Graph{
+class WeightedGraph: public Graph{
 private:
     std::vector<Node*> adjList;
 public:
     void addNode(const int& nodeVal){
-        Node* newNode=new Node(nodeVal);
+        Node* newNode = new Node(nodeVal);
         adjList.push_back(newNode);
         return;
     }
-    void addDirectedEdge(const Node* first, const Node* second){
-        if(checkAcyclic(first,second)){
-            first->addNeighbor(second);
-        }
+    void addWeightedEdge(const Node* first, const Node* second,const int& edgeWeight){
+        first->addNeighbor(second,edgeWeight);
         return;
     }
     void removeDirectedEdge(const Node*first, const Node* second){
@@ -41,7 +24,7 @@ public:
     }
     Node* getNode(const int& i){
         for(auto node:adjList){
-            if(node->getVal()==i){
+            if(node->getVal() == i){
                 return node;
             }
         }
@@ -53,9 +36,9 @@ public:
 
     void displayNodes(){
         for(auto node: adjList){
-            std::cout<<node->getVal()<<": InDegree: "<<node->getInDegree()<<" : ";
+            std::cout<<node->getVal()<<" : ";
             for(auto neighNode: node->getNeighbors()){
-                std::cout<<neighNode->getVal()<<" ";
+                std::cout<<neighNode.first->getVal()<<":"<<neighNode.second<<" ";
             }
             std::cout<<std::endl;
 
@@ -63,3 +46,4 @@ public:
     }
 
 };
+
