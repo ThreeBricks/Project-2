@@ -1,6 +1,5 @@
 #include "Node.h"
 #include "Graph.h"
-#include "DirectedGraph.h"
 #include "GraphSearch.h"
 
 using namespace std;
@@ -34,11 +33,6 @@ vector<Node> BFTRecLinkedList(){
 }
 vector<Node> BFTIterLinkedList(){
     return BFTIter(createLinkedList(10000));
-}
-
-DirectedGraph createRandomDAGIter(const int& n){
-    DirectedGraph dg;
-    return dg;
 }
 
 int main(){
